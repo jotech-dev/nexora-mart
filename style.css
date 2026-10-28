@@ -1698,3 +1698,77 @@ transition-duration: 0.01ms !important;
 body.cart-open {
     overflow: hidden;
 }
+/* =========================================
+   NEXORA MART — PROJECT CREDIT & DISCLOSURE
+========================================= */
+
+.footer-project-note {
+    margin-top: 28px;
+    padding: 20px 22px;
+
+    background: var(--green-light);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--green);
+    border-radius: 12px;
+}
+
+.footer-project-note p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.9rem;
+    line-height: 1.75;
+}
+
+.footer-project-note p:first-child {
+    margin-bottom: 6px;
+    color: var(--green-dark);
+    font-size: 0.95rem;
+    font-weight: 700;
+}
+
+
+/* STUDIO CREDIT */
+
+.footer-credit {
+    padding: 22px 0;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+}
+
+.footer-credit p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.9rem;
+}
+
+.footer-credit a {
+    color: var(--green);
+    font-weight: 700;
+    text-decoration: none;
+    transition: color 0.25s ease;
+}
+
+.footer-credit a:hover {
+    color: var(--green-dark);
+    text-decoration: underline;
+}
+
+
+/* MOBILE RESPONSIVENESS */
+
+@media (max-width: 600px) {
+
+    .footer-project-note {
+        margin-top: 22px;
+        padding: 17px;
+    }
+
+    .footer-project-note p {
+        font-size: 0.85rem;
+    }
+
+    .footer-credit {
+        padding: 18px 0;
+    }
+
+}
