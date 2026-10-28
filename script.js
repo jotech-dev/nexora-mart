@@ -142,7 +142,7 @@ const searchForm = document.getElementById("search-form");
 const searchInput = document.getElementById("search-input");
 
 const categoryLinks = document.querySelectorAll(
-    ".category-link, .category-card"
+    "button.category-link[data-category], button.category-card[data-category]"
 );
 
 const sortSelect = document.getElementById("sort-products");
@@ -173,7 +173,23 @@ const currentYear = document.getElementById("current-year");
 // APPLICATION STATE
 // ========================================
 
-let activeCategory = "all";
+// Detect whether this is the homepage or a category page.
+const categoryPages = {
+    "groceries.html": "groceries",
+    "beverages.html": "beverages",
+    "snacks.html": "snacks",
+    "personal-care.html": "personal-care",
+    "household.html": "household"
+};
+
+const currentPage = window.location.pathname
+    .split("/")
+    .pop()
+    .toLowerCase();
+
+const pageCategory = categoryPages[currentPage] || "all";
+
+let activeCategory = pageCategory;
 let searchTerm = "";
 
 let cart = [];
@@ -262,9 +278,13 @@ function renderProducts() {
     if (!productGrid) return;
 
     let filteredProducts = products.filter(product => {
-        const matchesCategory =
-            activeCategory === "all" ||
-            product.category === activeCategory;
+    // Category pages must only show their own products.
+    const requiredCategory =
+        pageCategory !== "all" ? pageCategory : activeCategory;
+
+    const matchesCategory =
+        requiredCategory === "all" ||
+        product.category === requiredCategory;
 
         const searchableText = (
             product.name + " " +
@@ -432,7 +452,7 @@ if (sortSelect) {
 
 if (resetProductsButton) {
     resetProductsButton.addEventListener("click", () => {
-        activeCategory = "all";
+        activeCategory = pageCategory;
         searchTerm = "";
 
         if (searchInput) {
@@ -817,3 +837,75 @@ renderProducts();
 updateCart();
 
 console.log("NEXORA MART is ready.");
+/* =========================================
+ANIMATED CATEGORY HEADING
+========================================= */
+
+(() => {
+const rotator = document.getElementById("category-heading-rotator");
+const description = document.getElementById("category-heading-description");
+
+if (!rotator || !description) return;
+
+const slides = [
+    {
+        title: "Category",
+        description: "Find the everyday essentials you need without the hassle."
+    },
+    {
+        title: "Groceries",
+        description: "Stock up on everyday food essentials for your home."
+    },
+    {
+        title: "Beverages",
+        description: "Discover refreshing drinks for every occasion."
+    },
+    {
+        title: "Snacks",
+        description: "Find tasty bites and treats for snack time."
+    },
+    {
+        title: "Personal Care",
+        description: "Shop everyday essentials for your personal care routine."
+    },
+    {
+        title: "Household",
+        description: "Get practical essentials to keep your home running smoothly."
+    }
+];
+
+let currentIndex = 0;
+
+const firstSlide = document.createElement("span");
+firstSlide.textContent = slides[0].title;
+firstSlide.classList.add("is-active");
+rotator.replaceChildren(firstSlide);
+
+function changeHeading() {
+    const nextIndex = (currentIndex + 1) % slides.length;
+
+    description.classList.add("is-changing");
+
+    const currentSlide = rotator.querySelector("span");
+    if (currentSlide) {
+        currentSlide.classList.remove("is-active");
+    }
+
+    window.setTimeout(() => {
+        currentIndex = nextIndex;
+
+        const nextSlide = document.createElement("span");
+        nextSlide.textContent = slides[currentIndex].title;
+        rotator.replaceChildren(nextSlide);
+
+        requestAnimationFrame(() => {
+            nextSlide.classList.add("is-active");
+            description.textContent = slides[currentIndex].description;
+            description.classList.remove("is-changing");
+        });
+    }, 350);
+}
+
+window.setInterval(changeHeading, 3000);
+
+})();
